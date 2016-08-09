@@ -25,7 +25,6 @@ void parse_fc(struct fontcfg *fc, uint8_t *fcl, uint8_t len){
         }
 
     }
-    printf("Parse");
 };
 
 void store_fc(struct fontcfg *fc, uint8_t *fcl){
@@ -34,15 +33,17 @@ void store_fc(struct fontcfg *fc, uint8_t *fcl){
     fcl[2]=fc->dbl?3:2;
 };
 
-int render_line(int lineno, char *s, uint8_t slen, const FONT_INFO *fonts[], uint8_t *bin, uint16_t binlen, uint8_t *fcli, uint8_t *fclo){
+int render_line(int lineno, char *s, uint8_t slen, const FONT_INFO *fonts[], uint8_t *bin, uint16_t binlen, uint8_t *fcli, uint8_t *fclo, uint8_t *maxho){
     struct fontcfg fc = {0,0,0};
     uint16_t byte=0;
     int16_t bit=0;
     uint32_t wbuf=0;
     uint8_t finish=0;
+    uint8_t maxh=0;
     if(fcli)
         parse_fc(&fc, fcli, FCLEN);
     fc.font=fonts[fc.fontn];
+    maxh=fc.font->height;
     int i;
     for(i=0;i<=slen;i++){
         if(s[i]==0){ //NULL terminator
@@ -51,6 +52,7 @@ int render_line(int lineno, char *s, uint8_t slen, const FONT_INFO *fonts[], uin
             i++;
             parse_fc(&fc, (uint8_t*)s+i, 1);
             fc.font=fonts[fc.fontn];
+            maxh=fc.font->height>maxh?fc.font->height:maxh;
         }else{
             FONT_CHAR_INFO ci=fc.font->descriptor[fromcp866(s[i])-fc.font->start];
             uint8_t ciw=ci.width;
@@ -87,6 +89,8 @@ int render_line(int lineno, char *s, uint8_t slen, const FONT_INFO *fonts[], uin
 
     if(fclo)
         store_fc(&fc, fclo);
+    if(maxho)
+        *maxho=maxh;
     return i;
 };
 

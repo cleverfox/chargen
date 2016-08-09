@@ -36,24 +36,30 @@ int main(int argc, char** argv){
         &trebuchetMS_8ptFontInfo
     };
 
-    fprintf(f,"#define x_width %d\n",72*8);
-    fprintf(f,"#define x_height %d\n",fonts[0]->height);
-    fprintf(f,"static unsigned char x_bits[] = {\n");
+    
 
     uint8_t fc[FCLEN];
     uint8_t fc2[FCLEN];
     bzero(fc,FCLEN);
     fc[0]=0x12;
     fc[1]=0x24;
+    uint8_t maxh=1;
 
-    for(int line=0;line<verdana_8ptFontInfo.height;line++){
+    for(int line=0;line<maxh;line++){
         bzero(bin,72);
-        int byte=render_line(line, s, 100, fonts, bin, 72, fc, fc2);
-        printf("%d\n",byte);
+        int byte=render_line(line, s, 100, fonts, bin, 72, fc, fc2, &maxh);
+        printf("%d ",byte);
         for(i=0;i<72;i++){
             if(line==0){
+                fprintf(f,"#define x_width %d\n",72*8);
+                fprintf(f,"#define x_height %d\n",maxh);
+                fprintf(f,"static unsigned char x_bits[] = {\n");
                 bin[i]|=0x80;
             }
+            if(line==maxh-1){
+                bin[i]|=0x80;
+            }
+
             if(i==71 && line==fonts[0]->height-1)
                 fprintf(f,"0x%02x",rb(bin[i]));
             else
