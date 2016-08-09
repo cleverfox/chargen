@@ -4,6 +4,8 @@
 #include <stdlib.h>
 #include "chargen.h"
 #include "verdana8.h"
+#include "tahoma8.h"
+#include "lucida10.h"
 
 char *showbin(uint32_t c, uint8_t w);
 char *showbin8(uint8_t c, uint8_t w);
@@ -12,34 +14,46 @@ uint8_t rb(uint8_t x);
 
 int main(int argc, char** argv){
     FILE *f;
-    const FONT_INFO font = verdana_8ptFontInfo;
-    char *s=malloc(101);
-    bzero(s,101);
-    //strcpy(s,"\x01\x8f\xe0\xa8\xa2\xa5\xe2? ");
+    char *s=malloc(200);
+    bzero(s,180);
+    //strcpy(s,"\x01\x8f\xe0\xff\x03\xa8\xa2\xa5\xe2?\xff\x02\xff\x02  ");
+    strcpy(s,"\xff\x02\x01\x8f\xe0\xa8\xa2\xa5\xe2@\xff\x03\xff\x12  ");
+    //strcpy(s,"lucida10\xff\x12       ");
     int i;
     for(i=0;i<100;i++){
-        s[i]=(i%10)+'0';
+        s[i+12]=i%10+'0';
     }
-    int line;
     uint8_t bin[72];
     f=fopen("x1.xbm","w");
 
+    const FONT_INFO *fonts[]={
+        &verdana_8ptFontInfo,
+        &tahoma_8ptFontInfo,
+        &lucidaConsole_10ptFontInfo
+    };
+
     fprintf(f,"#define x_width %d\n",72*8);
-    fprintf(f,"#define x_height %d\n",font.height);
+    fprintf(f,"#define x_height %d\n",fonts[0]->height);
     fprintf(f,"static unsigned char x_bits[] = {\n");
 
-    for(line=0;line<font.height;line++){
+    uint8_t fc[FCLEN];
+    uint8_t fc2[FCLEN];
+    bzero(fc,FCLEN);
+    fc[0]=0x12;
+    fc[1]=0x22;
+
+    for(int line=0;line<verdana_8ptFontInfo.height;line++){
         bzero(bin,72);
-        int byte=render_line(line, s, 100, font, bin, 72, 0,2);
+        int byte=render_line(line, s, 100, fonts, bin, 72, fc, fc2);
         printf("%d\n",byte);
         for(i=0;i<72;i++){
             if(line==0){
                 bin[i]|=0x80;
             }
-            if(i==71 && line==font.height-1)
-                fprintf(f,"0x%x",rb(bin[i]));
+            if(i==71 && line==fonts[0]->height-1)
+                fprintf(f,"0x%02x",rb(bin[i]));
             else
-                fprintf(f,"0x%x,",rb(bin[i]));
+                fprintf(f,"0x%02x,",rb(bin[i]));
         }
         fprintf(f,"\n");
         printf(".\n");
