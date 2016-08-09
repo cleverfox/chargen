@@ -2426,32 +2426,6 @@ const uint_8 tahoma_8ptBitmaps[] =
 /* { [Char width in bits], [Offset into tahoma_8ptCharBitmaps in bytes] } */
 const FONT_CHAR_INFO tahoma_8ptDescriptors[] = 
 {
-	{2, 0}, 		/* 	 */ 
-	{0, 0}, 		/* 
- */ 
-	{0, 0}, 		/* 
- */ 
-	{0, 0}, 		/*  */ 
-	{0, 0}, 		/* 
- */ 
-	{0, 0}, 		/*  */ 
-	{0, 0}, 		/*  */ 
-	{0, 0}, 		/*  */ 
-	{0, 0}, 		/*  */ 
-	{0, 0}, 		/*  */ 
-	{0, 0}, 		/*  */ 
-	{0, 0}, 		/*  */ 
-	{0, 0}, 		/*  */ 
-	{0, 0}, 		/*  */ 
-	{0, 0}, 		/*  */ 
-	{0, 0}, 		/*  */ 
-	{0, 0}, 		/*  */ 
-	{0, 0}, 		/*  */ 
-	{0, 0}, 		/*  */ 
-	{0, 0}, 		/*  */ 
-	{0, 0}, 		/*  */ 
-	{0, 0}, 		/*  */ 
-	{0, 0}, 		/*  */ 
 	{0, 0}, 		/*   */ 
 	{1, 13}, 		/* ! */ 
 	{3, 26}, 		/* " */ 
@@ -2619,7 +2593,7 @@ const FONT_CHAR_INFO tahoma_8ptDescriptors[] =
 const FONT_INFO tahoma_8ptFontInfo =
 {
 	13, /*  Character height */
-	'	', /*  Start character */
+	' ', /*  Start character */
 	192, /*  End character */
 	2, /*  Width, in pixels, of space character */
 	tahoma_8ptDescriptors, /*  Character descriptor array */

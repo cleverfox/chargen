@@ -6,6 +6,8 @@
 #include "verdana8.h"
 #include "tahoma8.h"
 #include "lucida10.h"
+#include "timesnewroman8.h"
+#include "trebuchet8.h"
 
 char *showbin(uint32_t c, uint8_t w);
 char *showbin8(uint8_t c, uint8_t w);
@@ -16,8 +18,8 @@ int main(int argc, char** argv){
     FILE *f;
     char *s=malloc(200);
     bzero(s,180);
-    //strcpy(s,"\x01\x8f\xe0\xff\x03\xa8\xa2\xa5\xe2?\xff\x02\xff\x02  ");
-    strcpy(s,"\xff\x02\x01\x8f\xe0\xa8\xa2\xa5\xe2@\xff\x03\xff\x12  ");
+    strcpy(s,"\x01\x8f\xe0\xa8\xa2\xa5\xe2!        ");
+    //strcpy(s,"\xff\x02\x01\x8f\xe0\xa8\xa2\xa5\xe2@\xff\x03\xff\x12  ");
     //strcpy(s,"lucida10\xff\x12       ");
     int i;
     for(i=0;i<100;i++){
@@ -29,7 +31,9 @@ int main(int argc, char** argv){
     const FONT_INFO *fonts[]={
         &verdana_8ptFontInfo,
         &tahoma_8ptFontInfo,
-        &lucidaConsole_10ptFontInfo
+        &lucidaConsole_10ptFontInfo,
+        &timesNewRoman_8ptFontInfo,
+        &trebuchetMS_8ptFontInfo
     };
 
     fprintf(f,"#define x_width %d\n",72*8);
@@ -40,7 +44,7 @@ int main(int argc, char** argv){
     uint8_t fc2[FCLEN];
     bzero(fc,FCLEN);
     fc[0]=0x12;
-    fc[1]=0x22;
+    fc[1]=0x24;
 
     for(int line=0;line<verdana_8ptFontInfo.height;line++){
         bzero(bin,72);
