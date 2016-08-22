@@ -17,16 +17,15 @@ uint8_t rb(uint8_t x);
 int main(int argc, char** argv){
     FILE *f;
     char *s=malloc(200);
-    bzero(s,180);
-    strcpy(s,"\x01\x8f\xe0\xa8\xa2\xa5\xe2!        ");
+    bzero(s,200);
+    strcpy(s,"\xff\x03Smet,\xff\x02 \x01\x8f\xe0\xa8\xff\x23\xa2\xa5\xe2!        ");
     //strcpy(s,"\xff\x02\x01\x8f\xe0\xa8\xa2\xa5\xe2@\xff\x03\xff\x12  ");
     //strcpy(s,"lucida10\xff\x12       ");
     int i;
-    for(i=0;i<100;i++){
-        s[i+12]=i%10+'0';
+    for(i=0;i<150;i++){
+        s[i+20]=i+'a';
     }
     uint8_t bin[72];
-    f=fopen("x1.xbm","w");
 
     const FONT_INFO *fonts[]={
         &verdana_8ptFontInfo,
@@ -36,40 +35,52 @@ int main(int argc, char** argv){
         &trebuchetMS_8ptFontInfo
     };
 
-    
-
+    int file=0;
     uint8_t fc[FCLEN];
     uint8_t fc2[FCLEN];
     bzero(fc,FCLEN);
     fc[0]=0x12;
     fc[1]=0x24;
     uint8_t maxh=1;
+    int totalbytes=strlen(s);
 
-    for(int line=0;line<maxh;line++){
-        bzero(bin,72);
-        int byte=render_line(line, s, 100, fonts, bin, 72, fc, fc2, &maxh);
-        printf("%d ",byte);
-        for(i=0;i<72;i++){
-            if(line==0){
-                fprintf(f,"#define x_width %d\n",72*8);
-                fprintf(f,"#define x_height %d\n",maxh);
-                fprintf(f,"static unsigned char x_bits[] = {\n");
-                bin[i]|=0x80;
-            }
-            if(line==maxh-1){
-                bin[i]|=0x80;
-            }
+    while(totalbytes>0){
+        file++;
+        int donebytes;
+        char filename[32];
+        sprintf(filename,"x%d.xbm",file);
+        f=fopen(filename,"w");
 
-            if(i==71 && line==fonts[0]->height-1)
-                fprintf(f,"0x%02x",rb(bin[i]));
-            else
-                fprintf(f,"0x%02x,",rb(bin[i]));
+        for(int line=0;line<maxh;line++){
+            bzero(bin,72);
+            donebytes=render_line(line, s, totalbytes, fonts, bin, 72, fc, fc2, &maxh);
+            printf("%d/%d %d ",file,line,donebytes);
+            for(i=0;i<72;i++){
+                if(line==0){
+                    fprintf(f,"#define x_width %d\n",72*8);
+                    fprintf(f,"#define x_height %d\n",maxh);
+                    fprintf(f,"static unsigned char x_bits[] = {\n");
+             //       bin[i]|=0x80;
+                }
+                if(line==maxh-1){
+            //        bin[i]|=0x80;
+                }
+
+                if(i==71 && line==fonts[0]->height-1)
+                    fprintf(f,"0x%02x",rb(bin[i]));
+                else
+                    fprintf(f,"0x%02x,",rb(bin[i]));
+            }
+            fprintf(f,"\n");
+            printf(".\n");
         }
-        fprintf(f,"\n");
-        printf(".\n");
+        fprintf(f,"};\n");
+        fclose(f);
+
+        totalbytes-=donebytes;
+        s+=donebytes;
+        memcpy(fc,fc2,FCLEN);
     }
-    fprintf(f,"};\n");
-    fclose(f);
 
     /*
     for(line=0;line<font.height;line++){

@@ -1,4 +1,5 @@
 tags
-x1.xbm
+x*.xbm
 *~
 a.out
+*.o
