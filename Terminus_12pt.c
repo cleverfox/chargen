@@ -1,5 +1,5 @@
 #include "fontdescr.h"
-const uint_8 terminusBitmaps[] = {
+const uint_8 Terminus_12ptBitmaps[] = {
 0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00, /* 32 0020 space */
 0x00,0x00,0x20,0x20,0x20,0x20,0x20,0x00,0x20,0x20,0x00,0x00, /* 33 0021 exclam */
 0x00,0x50,0x50,0x50,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00, /* 34 0022 quotedbl */
@@ -162,7 +162,7 @@ const uint_8 terminusBitmaps[] = {
 0x00,0x00,0x00,0x00,0x78,0x88,0x88,0x78,0x28,0x48,0x00,0x00, /* 1103 044F afii10097 */
 0x00,0x00,0x50,0x50,0x70,0x88,0xf8,0x80,0x80,0x78,0x00,0x00, /* 1105 0451 afii10071 */
 };
-const FONT_CHAR_INFO terminusDescriptors[] = {
+const FONT_CHAR_INFO Terminus_12ptDescriptors[] = {
 { 6,   0}, /* 32 0020 space */ /* 32 */
 { 6,  12}, /* 33 0021 exclam */ /* 33 */
 { 6,  24}, /* 34 0022 quotedbl */ /* 34 */
@@ -325,11 +325,11 @@ const FONT_CHAR_INFO terminusDescriptors[] = {
 { 6,1908}, /* 1103 044F afii10097 */ /* 191 */
 { 6,1920}, /* 1105 0451 afii10071 */ /* 192 */
 };
-const FONT_INFO terminusFontInfo = {
+const FONT_INFO Terminus_12ptFontInfo = {
 	12, /*  Char height */
 	32, /*  Start char */
 	192, /*  End char */
 	2, /*  space width*/
-	terminusDescriptors, /*  Char descr */
-	terminusBitmaps, /*  Char bitmap */
+	Terminus_12ptDescriptors, /*  Char descr */
+	Terminus_12ptBitmaps, /*  Char bitmap */
 };

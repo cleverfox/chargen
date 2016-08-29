@@ -64,10 +64,14 @@ int render_line(int lineno, char *s, uint8_t slen, const FONT_INFO *fonts[], uin
             if((byte+((bit+ciw)>>3)+pad)>binlen) finish=1;
             if(!finish){
                 uint32_t cword;
-                if(ciw<=8){
-                    cword=fc.font->bitmaps[char_offset]>>(8-ciw);
+                if(lineno<fc.font->height){
+                    if(ciw<=8){
+                        cword=fc.font->bitmaps[char_offset]>>(8-ciw);
+                    }else{
+                        cword=((fc.font->bitmaps[char_offset]<<8)|fc.font->bitmaps[char_offset+1])>>(16-ciw);
+                    }
                 }else{
-                    cword=((fc.font->bitmaps[char_offset]<<8)|fc.font->bitmaps[char_offset+1])>>(16-ciw);
+                    cword=0;
                 }
                 if(fc.dbl){
                     cword=doubler(cword,ciw);
