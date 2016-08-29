@@ -8,6 +8,7 @@
 #include "lucida10.h"
 #include "timesnewroman8.h"
 #include "trebuchet8.h"
+#include "terminus.h"
 
 char *showbin(uint32_t c, uint8_t w);
 char *showbin8(uint8_t c, uint8_t w);
@@ -18,7 +19,7 @@ int main(int argc, char** argv){
     FILE *f;
     char *s=malloc(200);
     bzero(s,200);
-    strcpy(s,"\xff\x03Smet,\xff\x02 \x01\x8f\xe0\xa8\xff\x23\xa2\xa5\xe2!        ");
+    strcpy(s,"\xff\x03\xff\x22Smet,\xff\x02 \x01\x8f\xe0\xa8\xa2\xa5\xe2!        ");
     //strcpy(s,"\xff\x02\x01\x8f\xe0\xa8\xa2\xa5\xe2@\xff\x03\xff\x12  ");
     //strcpy(s,"lucida10\xff\x12       ");
     int i;
@@ -30,6 +31,7 @@ int main(int argc, char** argv){
     const FONT_INFO *fonts[]={
         &verdana_8ptFontInfo,
         &tahoma_8ptFontInfo,
+        &terminusFontInfo,
         &lucidaConsole_10ptFontInfo,
         &timesNewRoman_8ptFontInfo,
         &trebuchetMS_8ptFontInfo
@@ -55,15 +57,19 @@ int main(int argc, char** argv){
             bzero(bin,72);
             donebytes=render_line(line, s, totalbytes, fonts, bin, 72, fc, fc2, &maxh);
             printf("%d/%d %d ",file,line,donebytes);
+            if(line==0){
+                printf("=0=");
+                fprintf(f,"#define x_width %d\n",72*8);
+                fprintf(f,"#define x_height %d\n",maxh);
+                fprintf(f,"static unsigned char x_bits[] = {\n");
+            }
+
             for(i=0;i<72;i++){
                 if(line==0){
-                    fprintf(f,"#define x_width %d\n",72*8);
-                    fprintf(f,"#define x_height %d\n",maxh);
-                    fprintf(f,"static unsigned char x_bits[] = {\n");
-             //       bin[i]|=0x80;
+                    bin[i]|=0x80;
                 }
                 if(line==maxh-1){
-            //        bin[i]|=0x80;
+                    bin[i]|=0x80;
                 }
 
                 if(i==71 && line==fonts[0]->height-1)
